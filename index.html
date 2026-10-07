@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتبة برومتات الصور بالذكاء الاصطناعي</title>
+<meta name="description" content="مئات برومتات الترند لعمل الصور وتعديلها بالذكاء الاصطناعي. انسخ البرومت وجرّبه فورًا.">
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#fff; --text:#1f2430; --muted:#6b7280;
+    --primary:#1e5eff; --primary-d:#1648c9; --border:#e3e6ec;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:auto;padding:0 14px}
+
+  /* الهيدر */
+  header{background:#fff;border-bottom:1px solid var(--border)}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0;flex-wrap:wrap}
+  .logo{font-size:22px;font-weight:800;color:var(--primary);cursor:pointer}
+  nav a{margin-inline-start:14px;color:var(--muted);font-size:15px;cursor:pointer}
+  nav a:hover{color:var(--primary)}
+
+  /* البانر */
+  .hero{background:linear-gradient(135deg,#1e5eff,#6a3df0);color:#fff;text-align:center;padding:38px 14px}
+  .hero h1{font-size:26px;margin-bottom:8px}
+  .hero p{opacity:.9;margin-bottom:18px}
+  .search{max-width:520px;margin:auto}
+  .search input{width:100%;padding:13px 16px;border:0;border-radius:10px;font-size:16px;font-family:inherit;outline:none}
+
+  /* التصنيفات */
+  .cats{display:flex;gap:8px;flex-wrap:wrap;padding:18px 0 6px}
+  .cat{padding:7px 16px;border:1px solid var(--border);background:#fff;border-radius:20px;cursor:pointer;font-size:14px;font-family:inherit}
+  .cat.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+  /* الشبكة */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;padding:14px 0 30px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+  .thumb{aspect-ratio:4/5;background:linear-gradient(135deg,#dfe7ff,#efe3ff);display:flex;align-items:center;justify-content:center;font-size:42px;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover}
+  .card-body{padding:12px}
+  .card-body h3{font-size:16px;margin-bottom:6px}
+  .tag{display:inline-block;font-size:12px;background:#eef2ff;color:var(--primary);padding:2px 10px;border-radius:12px}
+  .empty{text-align:center;color:var(--muted);padding:40px 0}
+
+  /* صفحة البرومت */
+  .detail{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;margin:20px 0}
+  .back{display:inline-block;margin:16px 0 0;color:var(--primary);cursor:pointer;font-size:15px}
+  .d-wrap{display:grid;grid-template-columns:320px 1fr;gap:20px}
+  .d-img{border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#dfe7ff,#efe3ff);aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;font-size:60px}
+  .d-img img{width:100%;height:100%;object-fit:cover}
+  .d-info h2{font-size:22px;margin-bottom:8px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .promptbox{background:#f8f9fb;border:1px dashed #b8c2d6;border-radius:10px;padding:14px;direction:ltr;text-align:left;font-family:Consolas,monospace;font-size:14px;white-space:pre-wrap;word-break:break-word}
+  .note{background:#fff8e1;border:1px solid #ffe08a;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:12px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .btn{padding:11px 22px;border:0;border-radius:8px;font-size:15px;cursor:pointer;font-family:inherit;font-weight:600}
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:hover{background:var(--primary-d)}
+  .btn-light{background:#eef2ff;color:var(--primary)}
+  h2.sec{font-size:19px;margin:22px 0 4px}
+
+  /* الصفحات الثابتة */
+  .page{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;margin:20px 0}
+  .page h2{margin-bottom:10px}
+  .page p{margin-bottom:10px;color:#374151}
+
+  /* الفوتر */
+  footer{background:#1f2430;color:#cbd2e0;text-align:center;padding:22px 14px;margin-top:30px;font-size:14px}
+  footer a{margin:0 10px;cursor:pointer;color:#fff}
+
+  /* رسالة النسخ */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#111827;color:#fff;padding:10px 22px;border-radius:24px;font-size:15px;transition:.3s;z-index:100000;opacity:0}
+  #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  @media(max-width:700px){
+    .d-wrap{grid-template-columns:1fr}
+    .hero h1{font-size:21px}
+    .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .card-body h3{font-size:14px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== إعلان A-ADS (Sticky) ===== -->
+<!-- BEGIN AADS AD UNIT 2457738 -->
+<div style="position: absolute; z-index: 99999">
+  <input autocomplete="off" type="checkbox" id="aadsstickymuy13zg2" hidden />
+  <div style="padding-top: auto; padding-bottom: 0;">
+    <div style="width:100%;height:auto;position:fixed;text-align:center;font-size:0;top:0;left:0;right:0;margin:auto">
+      <label for="aadsstickymuy13zg2" style="top: 50%;transform: translateY(-50%);right:24px;; position: absolute;border-radius: 4px; background: rgba(248, 248, 249, 0.70); padding: 4px;z-index: 99999;cursor:pointer">
+        <svg fill="#000000" height="16px" width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 490">
+          <polygon points="456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 "/>
+        </svg>
+      </label>
+      <div id="frame" style="width: 100%;margin: auto;position: relative; z-index: 99998;">
+        <iframe data-aa="2457738" src="//acceptable.a-ads.com/2457738/?size=Adaptive" style="border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto"></iframe>
+        <div style="width: 70%;margin:auto;text-align: left;position: absolute;left: 0;right: 0">
+          <a style="display:inline-block;font-size: 13px;color: #263238;padding: 4px 10px;background: #F8F8F9;text-decoration: none; border-radius: 0 0 4px 4px;"
+            id="frame-link" target="_blank"
+            href="https://aads.com/campaigns/new?source_id=2457738&source_type=ad_unit&partner=2457738">
+            Advertise here
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>#aadsstickymuy13zg2:checked + div{display:none;}</style>
+<!-- END AADS AD UNIT 2457738 -->
+
+<header>
+  <div class="wrap top">
+    <div class="logo" onclick="goHome()">✨ مكتبة البرومتات</div>
+    <nav>
+      <a onclick="goHome()">الرئيسية</a>
+      <a onclick="goPage('about')">من نحن</a>
+      <a onclick="goPage('contact')">تواصل معنا</a>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div style="margin-bottom:8px">
+    <a onclick="goPage('about')">من نحن</a>
+    <a onclick="goPage('privacy')">سياسة الخصوصية</a>
+    <a onclick="goPage('terms')">الشروط</a>
+    <a onclick="goPage('contact')">تواصل معنا</a>
+  </div>
+  <div>© <span id="yr"></span> مكتبة البرومتات — جميع الحقوق محفوظة</div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* =====================================================
+   ✏️ هنا تكتب البرومتات
+   انسخ هذا الشكل لكل برومت، وافصل بين البرومتات بفاصلة.
+   - slug: رابط البرومت (إنجليزي صغير، وبدون مسافات، ولا يتكرر)
+   - title: العنوان بالعربي
+   - category: التصنيف
+   - photo: true إذا يحتاج المستخدم يرفع صورته
+   - tool: اسم الأداة (اختياري)
+   - image: رابط صورة النتيجة (اختياري). ارفعها في مجلد images
+            واكتب مثلًا "images/ghibli.webp"
+   - prompt: نص البرومت
+   ===================================================== */
+const PROMPTS = [
+  {
+    slug: "3d-figurine-desk",
+    title: "مجسم 3D لك على المكتب",
+    category: "ترند",
+    photo: true,
+    tool: "Gemini / ChatGPT",
+    image: "",
+    prompt: "Create a 1/7 scale collectible figurine of the person in this photo, standing on a round transparent base on a computer desk. Keep the face and outfit identical. Realistic PVC texture, glossy finish, soft studio lighting, a colorful toy box with artwork behind it."
+  },
+
+  /* ⬇⬇⬇ ألصق برومتاتك هنا ⬇⬇⬇ */
+
+{slug:"watercolor-anime-portrait",title:"بورتريه أنمي بألوان مائية",category:"أنمي",photo:true,prompt:"Transform this photo into a soft hand-painted anime film style portrait with watercolor backgrounds, gentle pastel colors, delicate line work, warm sunlight and drifting clouds. Keep the face recognizable."},
+  {slug:"90s-yearbook",title:"صورة كتاب سنوي من التسعينات",category:"ريترو",photo:true,prompt:"Turn this photo into a 1990s school yearbook portrait: blue laser-style backdrop, slightly faded film grain, soft flash, retro clothing and hairstyle, warm vintage colors. Keep the face identical."},
+  {slug:"cinematic-movie-poster",title:"ملصق فيلم سينمائي",category:"سينمائي",photo:true,prompt:"Make this photo into a dramatic cinematic movie poster. The person stands in the center, moody teal and orange lighting, a city skyline behind, large blank title area at the bottom, shallow depth of field, ultra detailed."},
+  {slug:"golden-hour-edit",title:"إضاءة الغروب الذهبية",category:"تعديل صور",photo:true,prompt:"Edit this photo to look like it was taken during golden hour. Add warm sunlight from the side, soft rim light on hair, gentle lens flare, richer skin tones. Do not change the face or pose."},
+  {slug:"remove-background-studio",title:"خلفية استوديو احترافية",category:"تعديل صور",photo:true,prompt:"Replace the background of this photo with a clean light-gray professional studio backdrop. Keep the person exactly the same, fix the edges around the hair, add soft even studio lighting."},
+  {slug:"clay-animation-style",title:"شخصية من الصلصال",category:"ترند",photo:true,prompt:"Turn this photo into a claymation character in the style of a handmade stop-motion film. Visible fingerprint textures, soft rounded shapes, bright colors, miniature set background, soft studio light."},
+  {slug:"pixar-style-3d",title:"شخصية كرتون 3D",category:"ترند",photo:true,prompt:"Convert this photo into a cute 3D animated movie character with big expressive eyes, smooth skin, soft cinematic lighting and a colorful blurred background. Keep hairstyle and outfit similar."},
+  {slug:"pencil-sketch",title:"رسم بقلم الرصاص",category:"فن",photo:true,prompt:"Redraw this photo as a detailed graphite pencil sketch on textured white paper. Fine shading, cross-hatching, realistic proportions, visible pencil strokes, no color."},
+  {slug:"oil-painting-classic",title:"لوحة زيتية كلاسيكية",category:"فن",photo:true,prompt:"Paint this photo as a classical oil portrait in a museum style. Rich brush strokes, dark warm background, dramatic side lighting, deep colors, subtle canvas texture."},
+  {slug:"cyberpunk-neon-portrait",title:"بورتريه سايبربنك نيون",category:"خيال علمي",photo:true,prompt:"Restyle this photo as a cyberpunk portrait at night: neon pink and blue lights on the face, rainy street reflections, glowing signs in the background, futuristic jacket. Keep the face identical."},
+  {slug:"polaroid-vintage",title:"صورة بولارويد قديمة",category:"ريترو",photo:true,prompt:"Make this photo look like an old Polaroid print: white border, faded colors, light leaks, slight blur, film grain, warm nostalgic tone."},
+  {slug:"lego-minifigure",title:"شخصية ليغو",category:"ترند",photo:true,prompt:"Turn the person in this photo into a toy building-brick minifigure with a blocky body, plastic shine and printed face. Standing on a brick baseplate in a small brick-built scene, macro toy photography."},
+  {slug:"comic-book-cover",title:"غلاف مجلة كوميك",category:"ترند",photo:true,prompt:"Transform this photo into a bold comic book cover illustration: thick ink outlines, halftone dots, vivid colors, dynamic pose, speech bubble and action background, blank title banner at the top."},
+  {slug:"snow-globe",title:"كرة ثلج",category:"ترند",photo:true,prompt:"Place the person in this photo as a tiny figure inside a glass snow globe with falling snow, a miniature winter village, wooden base, warm glow, macro photo with shallow depth of field."},
+  {slug:"luxury-perfume-ad",title:"إعلان عطر فاخر",category:"منتجات",photo:false,prompt:"Luxury perfume bottle on a black marble surface with golden water splashes, dramatic rim lighting, floating gold dust, dark elegant background, commercial advertising photography, ultra sharp."},
+  {slug:"sneaker-floating",title:"حذاء رياضي معلّق",category:"منتجات",photo:false,prompt:"A modern white sneaker floating in mid-air with colorful paint splashes around it, clean gradient background, studio lighting, high-end advertising photo, sharp detail."},
+  {slug:"coffee-cup-minimal",title:"كوب قهوة بتصميم بسيط",category:"منتجات",photo:false,prompt:"A ceramic coffee cup with steam on a wooden table beside a window, soft morning light, minimal Scandinavian style, shallow depth of field, cozy warm tones, food photography."},
+  {slug:"smartwatch-product",title:"ساعة ذكية على خلفية داكنة",category:"منتجات",photo:false,prompt:"A smartwatch on a dark reflective surface with glowing blue accent light, thin mist, dramatic shadows, premium tech product render, ultra detailed, 4k."},
+  {slug:"skincare-bottle",title:"منتج عناية بالبشرة",category:"منتجات",photo:false,prompt:"A frosted glass skincare serum bottle on a pastel pink pedestal with water ripples and soft shadows, fresh green leaves nearby, clean beauty ad style, soft diffused light."},
+  {slug:"floating-island",title:"جزيرة عائمة خيالية",category:"خيال",photo:false,prompt:"A floating island in the sky with waterfalls pouring into clouds, a small stone house and green trees, golden sunset, painterly fantasy landscape, epic scale, highly detailed."},
+  {slug:"cozy-reading-nook",title:"ركن قراءة دافئ",category:"خيال",photo:false,prompt:"A cozy reading nook by a rainy window with a velvet armchair, stacked books, warm lamp light, a cat sleeping on a blanket, soft hand-painted illustration style."},
+  {slug:"astronaut-desert",title:"رائد فضاء في الصحراء",category:"سينمائي",photo:false,prompt:"An astronaut sitting on a sand dune in a vast desert at dusk, giant planet rising in the sky, long shadows, cinematic wide shot, film grain, muted warm colors."},
+  {slug:"mosque-golden-hour",title:"مسجد عند الغروب",category:"عمارة",photo:false,prompt:"A grand mosque with detailed domes and minarets at golden hour, reflecting in a calm pool, soft orange sky, peaceful atmosphere, architectural photography, wide angle, no people."},
+  {slug:"ramadan-lantern-scene",title:"فانوس رمضاني دافئ",category:"مناسبات",photo:false,prompt:"A glowing brass Ramadan lantern on a wooden table with dates and tea, crescent moon in the window behind, warm soft bokeh lights, calm festive mood, high quality photo."},
+  {slug:"eid-greeting-card",title:"بطاقة تهنئة بالعيد",category:"مناسبات",photo:false,prompt:"An elegant Eid greeting card design with gold geometric patterns on deep emerald green, crescent and stars, hanging lanterns, empty space in the center for text, luxurious flat illustration."},
+  {slug:"kids-storybook-forest",title:"غابة لقصص الأطفال",category:"أطفال",photo:false,prompt:"A magical forest for a children's storybook: friendly foxes, glowing mushrooms, tiny lanterns, soft pastel colors, rounded shapes, warm light, gentle watercolor illustration."},
+  {slug:"isometric-room",title:"غرفة مصغّرة ثلاثية الأبعاد",category:"3D",photo:false,prompt:"A tiny isometric gaming room diorama with a desk, glowing monitor, plants and neon sign, cutaway walls, soft 3D render, pastel colors, clean background."},
+  {slug:"vintage-travel-poster",title:"ملصق سفر قديم",category:"ريترو",photo:false,prompt:"A vintage travel poster of a Mediterranean coastal town, bold flat colors, art deco typography space at the bottom, sun and sea waves, retro 1950s illustration style."},
+  {slug:"minimal-logo-mark",title:"شعار بسيط وأنيق",category:"تصميم",photo:false,prompt:"A minimal modern logo mark of a crescent combined with a book, clean geometric lines, a single deep blue color on a white background, vector style, centered, lots of negative space."},
+  {slug:"studio-headshot-pro",title:"صورة شخصية احترافية للسيرة الذاتية",category:"تعديل صور",photo:true,prompt:"Turn this photo into a professional headshot: neutral soft-gray background, even studio lighting, clean neat clothing, sharp eyes, natural skin texture. Keep the face and features exactly the same."},
+  {slug:"black-white-film-portrait",title:"بورتريه أبيض وأسود سينمائي",category:"بورتريه",photo:true,prompt:"Convert this photo into a dramatic black and white film portrait with deep contrast, soft side lighting, fine film grain and a dark background. Keep the face identical."},
+  {slug:"anime-school-scene",title:"مشهد أنمي في الشارع",category:"أنمي",photo:true,prompt:"Redraw this photo as an anime movie scene: the person walking on a quiet street under blooming trees, bright blue sky with big clouds, clean line art, vivid colors, soft wind. Keep the face recognizable."},
+  {slug:"manga-page-style",title:"صفحة مانجا بالأبيض والأسود",category:"أنمي",photo:true,prompt:"Turn this photo into a black and white manga page illustration with screen tones, sharp ink lines, speed lines and dramatic shading. Keep the face recognizable."},
+  {slug:"stained-glass-portrait",title:"بورتريه بالزجاج الملوّن",category:"فن",photo:true,prompt:"Recreate this photo as a stained glass window portrait with thick dark lead lines, jewel-toned glass pieces, light shining through, ornate border. Keep the face recognizable."},
+  {slug:"pop-art-four-panel",title:"بوب آرت بأربعة ألوان",category:"فن",photo:true,prompt:"Make a pop art poster from this photo in a 2x2 grid, each panel with a different bold color scheme, halftone dots, thick outlines,
